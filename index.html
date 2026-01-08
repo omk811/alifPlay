@@ -1,16 +1,15 @@
 <!doctype html>
 <html lang="ar" dir="rtl" class="h-full">
-<head>
+ <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>لعبة الألف في آخر الأفعال</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+  <script src="/_sdk/element_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&amp;display=swap" rel="stylesheet">
   <style>
     * {
       box-sizing: border-box;
-      margin: 0;
-      padding: 0;
     }
     
     body {
@@ -18,706 +17,416 @@
       overflow-x: hidden;
     }
     
-    .arabic-text {
-      font-family: 'Amiri', serif;
-    }
-    
-    /* Animations */
-    @keyframes slideInUp {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-    
-    @keyframes slideInDown {
-      from {
-        opacity: 0;
-        transform: translateY(-30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-    
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-    
-    @keyframes scaleIn {
-      from {
-        opacity: 0;
-        transform: scale(0.8);
-      }
-      to {
-        opacity: 1;
-        transform: scale(1);
-      }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
     
     @keyframes pulse {
       0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.08); }
+      50% { transform: scale(1.05); }
     }
     
     @keyframes shake {
       0%, 100% { transform: translateX(0); }
-      25% { transform: translateX(-8px); }
-      75% { transform: translateX(8px); }
+      25% { transform: translateX(-5px); }
+      75% { transform: translateX(5px); }
     }
     
-    @keyframes bounce {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-12px); }
+    @keyframes celebrate {
+      0% { transform: scale(1) rotate(0deg); }
+      25% { transform: scale(1.1) rotate(-5deg); }
+      50% { transform: scale(1.2) rotate(5deg); }
+      75% { transform: scale(1.1) rotate(-5deg); }
+      100% { transform: scale(1) rotate(0deg); }
     }
     
     @keyframes float {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-15px); }
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
     }
     
-    @keyframes spin {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
+    .animate-slide { animation: slideIn 0.5s ease-out; }
+    .animate-pulse-custom { animation: pulse 0.3s ease-out; }
+    .animate-shake { animation: shake 0.5s ease-out; }
+    .animate-celebrate { animation: celebrate 0.6s ease-out; }
+    .animate-float { animation: float 2s ease-in-out infinite; }
+    
+    .star-bg {
+      background: radial-gradient(circle at 20% 80%, rgba(255,215,0,0.1) 0%, transparent 50%),
+                  radial-gradient(circle at 80% 20%, rgba(255,215,0,0.1) 0%, transparent 50%);
     }
     
-    @keyframes wiggle {
-      0%, 100% { transform: rotate(0deg); }
-      25% { transform: rotate(-10deg); }
-      75% { transform: rotate(10deg); }
-    }
-    
-    @keyframes glow {
-      0%, 100% { box-shadow: 0 0 20px rgba(99, 102, 241, 0.5); }
-      50% { box-shadow: 0 0 40px rgba(99, 102, 241, 0.8), 0 0 60px rgba(99, 102, 241, 0.6); }
-    }
-    
-    @keyframes sparkle {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.5; transform: scale(1.2); }
-    }
-    
-    /* Animation classes */
-    .animate-slide-up { animation: slideInUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); }
-    .animate-slide-down { animation: slideInDown 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); }
-    .animate-fade-in { animation: fadeIn 0.5s ease-out; }
-    .animate-scale-in { animation: scaleIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); }
-    .animate-pulse-custom { animation: pulse 0.4s ease-out; }
-    .animate-shake { animation: shake 0.6s ease-out; }
-    .animate-bounce { animation: bounce 0.6s ease-out; }
-    .animate-float { animation: float 3s ease-in-out infinite; }
-    .animate-spin-slow { animation: spin 3s linear infinite; }
-    .animate-wiggle { animation: wiggle 0.5s ease-out; }
-    .animate-glow { animation: glow 2s ease-in-out infinite; }
-    .animate-sparkle { animation: sparkle 1.5s ease-in-out infinite; }
-    
-    /* Gradient backgrounds */
-    .gradient-purple {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    }
-    
-    .gradient-blue {
-      background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
-    }
-    
-    .gradient-green {
-      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-    }
-    
-    .gradient-orange {
-      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-    }
-    
-    .gradient-red {
-      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-    }
-    
-    /* Glass effect */
     .glass-effect {
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.3);
+      backdrop-filter: blur(10px);
+      background: rgba(255,255,255,0.95);
     }
     
-    /* Star background */
-    .stars-bg {
-      background-image:
-        radial-gradient(2px 2px at 20px 30px, rgba(255, 255, 255, 0.8), transparent),
-        radial-gradient(2px 2px at 60px 70px, rgba(255, 255, 255, 0.6), transparent),
-        radial-gradient(1px 1px at 50px 50px, rgba(255, 255, 255, 0.7), transparent),
-        radial-gradient(1px 1px at 130px 80px, rgba(255, 255, 255, 0.5), transparent),
-        radial-gradient(2px 2px at 90px 10px, rgba(255, 255, 255, 0.8), transparent);
-      background-size: 200px 200px;
-      background-position: 0 0, 40px 60px, 130px 270px, 70px 100px, 150px 50px;
+    /* تحسينات للشاشات الصغيرة */
+    @media (max-width: 640px) {
+      .text-responsive-xl { font-size: 1.25rem; }
+      .text-responsive-2xl { font-size: 1.5rem; }
+      .text-responsive-3xl { font-size: 1.75rem; }
+      .text-responsive-4xl { font-size: 2rem; }
+      
+      .p-responsive { padding: 1rem; }
+      .space-y-responsive > * + * { margin-top: 0.75rem; }
     }
     
-    /* Button hover effects */
-    .btn-hover {
-      position: relative;
-      overflow: hidden;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    /* ضمان عدم التمرير الأفقي */
+    body, html {
+      max-width: 100vw;
+      overflow-x: hidden;
     }
     
-    .btn-hover::before {
-      content: '';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 0;
-      height: 0;
-      background: rgba(255, 255, 255, 0.2);
-      border-radius: 50%;
-      transform: translate(-50%, -50%);
-      transition: width 0.6s, height 0.6s;
-    }
-    
-    .btn-hover:hover::before {
-      width: 300px;
-      height: 300px;
-    }
-    
-    .btn-hover:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-    }
-    
-    .btn-hover:active {
-      transform: translateY(-2px);
-    }
-    
-    /* Score badge */
-    .score-badge {
-      background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
-      box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
-    }
-    
-    /* Progress bar */
-    .progress-bar {
-      height: 6px;
-      background: rgba(255, 255, 255, 0.2);
-      border-radius: 10px;
-      overflow: hidden;
-    }
-    
-    .progress-fill {
-      height: 100%;
-      background: linear-gradient(90deg, #10b981, #059669);
-      transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-      box-shadow: 0 0 10px rgba(16, 185, 129, 0.6);
-    }
-    
-    /* Confetti animation */
-    .confetti {
-      position: fixed;
-      width: 10px;
-      height: 10px;
-      background: #fbbf24;
-      position: absolute;
-      animation: confetti-fall 3s linear forwards;
-    }
-    
-    @keyframes confetti-fall {
-      to {
-        transform: translateY(100vh) rotate(360deg);
-        opacity: 0;
+    /* تحسين الأزرار للشاشات الصغيرة */
+    @media (max-width: 640px) {
+      button {
+        min-height: 3rem;
+        padding: 0.75rem 1rem !important;
       }
     }
-    
-    /* Custom scrollbar */
-    ::-webkit-scrollbar {
-      width: 10px;
-    }
-    
-    ::-webkit-scrollbar-track {
-      background: rgba(255, 255, 255, 0.1);
-    }
-    
-    ::-webkit-scrollbar-thumb {
-      background: rgba(99, 102, 241, 0.5);
-      border-radius: 5px;
-    }
-    
-    ::-webkit-scrollbar-thumb:hover {
-      background: rgba(99, 102, 241, 0.7);
-    }
-    
-    /* Card shadows */
-    .card-shadow {
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-    }
-    
-    .card-shadow-hover {
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    
-    .card-shadow-hover:hover {
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
-      transform: translateY(-5px);
-    }
-    
-    /* Tooltip */
-    .tooltip {
-      position: relative;
-    }
-    
-    .tooltip::after {
-      content: attr(data-tooltip);
-      position: absolute;
-      bottom: 100%;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(0, 0, 0, 0.8);
-      color: white;
-      padding: 8px 12px;
-      border-radius: 8px;
-      font-size: 12px;
-      white-space: nowrap;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s;
-      margin-bottom: 8px;
-    }
-    
-    .tooltip:hover::after {
-      opacity: 1;
-    }
   </style>
-</head>
-<body class="h-full gradient-purple stars-bg overflow-hidden">
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full bg-gradient-to-br from-indigo-900 via-purple-900 to-indigo-800 star-bg">
   <div id="app" class="w-full h-full flex flex-col">
+   
+   <!-- الهيدر - يظهر فقط في شاشة البداية -->
+   <header id="mainHeader" class="bg-white border-b-4 border-indigo-600 shadow-xl">
+    <div class="container mx-auto px-3 sm:px-4 md:px-6 py-3 sm:py-4">
+     <div class="flex items-center justify-between">
+      <div class="flex items-center gap-2 sm:gap-3">
+       <div class="text-2xl sm:text-3xl md:text-4xl animate-float">
+        📚
+       </div>
+       <div>
+        <h1 id="headerTitle" class="text-base sm:text-lg md:text-xl lg:text-2xl font-extrabold text-indigo-900 leading-tight">لعبة الألف في الأفعال</h1>
+        <p class="text-xs text-indigo-600 hidden sm:block">تعلم القواعد بطريقة تفاعلية</p>
+       </div>
+      </div>
+      <div class="text-2xl sm:text-3xl">
+       ✨
+      </div>
+     </div>
+    </div>
+   </header>
+
+   <!-- المحتوى الرئيسي -->
+   <main class="flex-1 overflow-auto">
     
-    <!-- Header -->
-    <header class="glass-effect shadow-2xl border-b-4 border-white/20 animate-slide-down">
-      <div class="container mx-auto px-4 md:px-8 py-5">
-        <div class="flex items-center justify-between">
-          <div class="flex items-center gap-4">
-            <div class="text-5xl animate-float">📚</div>
-            <div>
-              <h1 class="text-2xl md:text-3xl font-black text-indigo-900 arabic-text">
-                لعبة الألف في الأفعال
-              </h1>
-              <p class="text-sm text-indigo-600 font-semibold mt-1">تعلم القواعد بطريقة ممتعة وتفاعلية ✨</p>
-            </div>
-          </div>
-          <div class="hidden md:flex items-center gap-3">
-            <div class="text-4xl animate-sparkle">⭐</div>
-            <div class="text-4xl animate-wiggle">🎯</div>
-          </div>
-        </div>
+    <!-- شاشة البداية -->
+    <div id="startScreen" class="min-h-full flex items-center justify-center p-3 sm:p-4 md:p-6 animate-slide">
+     <div class="glass-effect rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 lg:p-12 max-w-2xl w-full text-center shadow-2xl">
+      <div class="text-4xl sm:text-5xl md:text-6xl mb-4 sm:mb-6 animate-float">
+       📚
       </div>
-    </header>
-
-    <!-- Main Content -->
-    <main class="flex-1 overflow-auto p-4 md:p-8">
+      <h1 id="gameTitle" class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-indigo-900 mb-3 sm:mb-4 leading-tight">لعبة الألف في الأفعال</h1>
+      <p class="text-gray-600 mb-6 sm:mb-8 text-sm sm:text-base md:text-lg">اختبر معرفتك بقواعد كتابة الألف في آخر الأفعال</p>
       
-      <!-- Start Screen -->
-      <div id="startScreen" class="flex items-center justify-center min-h-full">
-        <div class="glass-effect rounded-3xl p-8 md:p-12 max-w-3xl w-full card-shadow animate-scale-in">
-          
-          <!-- Hero Icon -->
-          <div class="text-center mb-8">
-            <div class="text-8xl mb-4 animate-bounce">📚</div>
-            <h1 class="text-4xl md:text-5xl font-black text-indigo-900 mb-3 arabic-text">
-              لعبة الألف في الأفعال
-            </h1>
-            <p class="text-xl text-gray-600 font-medium">
-              اكتشف متعة تعلم قواعد اللغة العربية 🎮
-            </p>
-          </div>
-
-          <!-- Rules Box -->
-          <div class="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-2xl p-6 mb-8 border-2 border-indigo-200 card-shadow">
-            <div class="flex items-center gap-3 mb-4">
-              <div class="text-3xl">📖</div>
-              <h3 class="text-xl font-black text-indigo-900">تذكّر القاعدة:</h3>
-            </div>
-            <div class="space-y-4">
-              <div class="flex items-start gap-3 bg-white/70 rounded-xl p-4 border border-indigo-200">
-                <div class="text-2xl">🔵</div>
-                <div class="flex-1">
-                  <p class="text-gray-800 font-bold text-lg mb-1">الألف الممدودة (ا)</p>
-                  <p class="text-gray-600">إذا كان أصلها <span class="text-indigo-600 font-black">واو</span> في المضارع</p>
-                  <p class="text-sm text-indigo-600 mt-2 font-semibold">مثال: دعا ← يدعو</p>
-                </div>
-              </div>
-              <div class="flex items-start gap-3 bg-white/70 rounded-xl p-4 border border-purple-200">
-                <div class="text-2xl">🟣</div>
-                <div class="flex-1">
-                  <p class="text-gray-800 font-bold text-lg mb-1">الألف المقصورة (ى)</p>
-                  <p class="text-gray-600">إذا كان أصلها <span class="text-purple-600 font-black">ياء</span> في المضارع</p>
-                  <p class="text-sm text-purple-600 mt-2 font-semibold">مثال: قضى ← يقضي</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Game Mode Buttons -->
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-            <button onclick="startGame('practice')" class="btn-hover gradient-blue text-white rounded-2xl p-6 card-shadow group">
-              <div class="text-5xl mb-3 group-hover:animate-wiggle">✍️</div>
-              <div class="text-2xl font-black mb-2">التطبيق العملي</div>
-              <div class="text-sm opacity-90 font-medium">اختبر مهارتك في كتابة الأفعال بشكل صحيح</div>
-              <div class="mt-4 flex items-center justify-center gap-2 text-xs opacity-80">
-                <span>10 أسئلة</span>
-                <span>•</span>
-                <span>متنوعة</span>
-              </div>
-            </button>
-            
-            <button onclick="startGame('theory')" class="btn-hover gradient-green text-white rounded-2xl p-6 card-shadow group">
-              <div class="text-5xl mb-3 group-hover:animate-wiggle">📖</div>
-              <div class="text-2xl font-black mb-2">قياس حفظ القواعد</div>
-              <div class="text-sm opacity-90 font-medium">أسئلة صح وخطأ واختيارات متعددة</div>
-              <div class="mt-4 flex items-center justify-center gap-2 text-xs opacity-80">
-                <span>10 أسئلة</span>
-                <span>•</span>
-                <span>نظرية</span>
-              </div>
-            </button>
-          </div>
-
-          <!-- Tips -->
-          <div class="mt-8 text-center">
-            <p class="text-gray-500 text-sm font-medium">
-              💡 نصيحة: استعن بالفعل المضارع لمعرفة أصل الألف
-            </p>
-          </div>
+      <div class="bg-indigo-50 rounded-xl sm:rounded-2xl p-4 sm:p-5 md:p-6 mb-6 sm:mb-8 text-right">
+       <h3 class="font-bold text-indigo-800 mb-2 sm:mb-3 text-base sm:text-lg">📖 تذكّر القاعدة:</h3>
+       <div class="text-gray-700 space-y-2 sm:space-y-3 text-xs sm:text-sm">
+        <div class="bg-white rounded-lg sm:rounded-xl p-2 sm:p-3">
+         <p class="font-bold text-indigo-700 mb-1 sm:mb-2">🔹 الأفعال الثلاثية:</p>
+         <ul class="space-y-1 mr-3 sm:mr-4 text-right">
+          <li>• <strong>ألف ممدودة (ا):</strong> إذا كان أصلها <span class="text-indigo-600 font-bold">واو</span> (دعا ← يدعو)</li>
+          <li>• <strong>ألف مقصورة (ى):</strong> إذا كان أصلها <span class="text-purple-600 font-bold">ياء</span> (رمى ← يرمي)</li>
+         </ul>
         </div>
+        <div class="bg-white rounded-lg sm:rounded-xl p-2 sm:p-3">
+         <p class="font-bold text-emerald-700 mb-1 sm:mb-2">🔹 الأفعال غير الثلاثية (رباعية وأكثر):</p>
+         <ul class="space-y-1 mr-3 sm:mr-4 text-right">
+          <li>• <strong>ألف مقصورة (ى):</strong> في جميع الحالات (أعطى، استوفى)</li>
+          <li>• <strong>ألف ممدودة (ا):</strong> فقط إذا كان ما قبلها <span class="text-orange-600 font-bold">ياء</span> (أحيا، استحيا)</li>
+         </ul>
+        </div>
+       </div>
+      </div>
+      
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+       <button onclick="startGame('practice')" class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold py-4 sm:py-5 md:py-6 px-4 sm:px-6 rounded-xl sm:rounded-2xl hover:from-indigo-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+        <div class="text-2xl sm:text-3xl mb-1 sm:mb-2">✍️</div>
+        <div class="text-base sm:text-lg md:text-xl">التطبيق العملي</div>
+        <div class="text-xs mt-1 opacity-80">اختبر كتابة الأفعال</div>
+       </button>
+       
+       <button onclick="startGame('theory')" class="bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-bold py-4 sm:py-5 md:py-6 px-4 sm:px-6 rounded-xl sm:rounded-2xl hover:from-emerald-700 hover:to-teal-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+        <div class="text-2xl sm:text-3xl mb-1 sm:mb-2">📖</div>
+        <div class="text-base sm:text-lg md:text-xl">قياس حفظ القواعد</div>
+        <div class="text-xs mt-1 opacity-80">صح وخطأ واختيارات</div>
+       </button>
+      </div>
+     </div>
+    </div>
+
+    <!-- شاشة اللعبة -->
+    <div id="gameScreen" class="hidden min-h-full flex flex-col p-3 sm:p-4 md:p-6">
+     
+     <!-- شريط المعلومات -->
+     <div class="glass-effect rounded-xl sm:rounded-2xl p-3 sm:p-4 mb-4 sm:mb-6 flex justify-between items-center shadow-lg flex-wrap gap-2">
+      <div class="flex items-center gap-1 sm:gap-2">
+       <span class="text-xl sm:text-2xl">⭐</span>
+       <span id="score" class="text-xl sm:text-2xl font-bold text-indigo-900">0</span>
+      </div>
+      <div class="flex items-center gap-1 sm:gap-2">
+       <span class="text-gray-600 text-xs sm:text-sm">السؤال</span>
+       <span id="questionNum" class="bg-indigo-600 text-white px-2 sm:px-3 py-1 rounded-full font-bold text-xs sm:text-sm">1/10</span>
+      </div>
+      <div class="flex items-center gap-1 sm:gap-2">
+       <span id="streak" class="text-xl sm:text-2xl">🔥</span>
+       <span id="streakCount" class="font-bold text-orange-600 text-sm sm:text-base">0</span>
+      </div>
+     </div>
+
+     <!-- بطاقة السؤال -->
+     <div id="questionCard" class="glass-effect rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 flex-1 flex flex-col shadow-2xl animate-slide overflow-auto">
+      
+      <!-- نوع السؤال -->
+      <div id="questionType" class="text-center mb-4 sm:mb-6">
+       <span class="bg-indigo-100 text-indigo-800 px-3 sm:px-4 py-1 sm:py-2 rounded-full text-xs sm:text-sm font-bold inline-block">اختر الإجابة الصحيحة</span>
       </div>
 
-      <!-- Game Screen -->
-      <div id="gameScreen" class="hidden min-h-full flex flex-col">
-        
-        <!-- Stats Bar -->
-        <div class="glass-effect rounded-2xl p-5 mb-6 card-shadow animate-slide-down">
-          <div class="flex items-center justify-between gap-4">
-            
-            <!-- Score -->
-            <div class="flex items-center gap-3 score-badge rounded-2xl px-5 py-3">
-              <span class="text-3xl">⭐</span>
-              <div>
-                <div class="text-xs text-white/80 font-bold">النقاط</div>
-                <div id="score" class="text-3xl font-black text-white">0</div>
-              </div>
-            </div>
+      <!-- السؤال -->
+      <div class="flex-1 flex flex-col items-center justify-center">
+       <p id="questionText" class="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-gray-800 text-center mb-6 sm:mb-8 leading-relaxed px-2"></p>
 
-            <!-- Question Progress -->
-            <div class="flex-1 hidden md:block">
-              <div class="flex items-center justify-between mb-2">
-                <span class="text-sm font-bold text-indigo-900">التقدم</span>
-                <span id="questionNum" class="text-sm font-bold text-indigo-600">1/10</span>
-              </div>
-              <div class="progress-bar">
-                <div id="progressBar" class="progress-fill" style="width: 10%"></div>
-              </div>
-            </div>
+       <!-- الفعل المضارع كتلميح -->
+       <div id="hintBox" class="hidden bg-amber-50 border-2 border-amber-200 rounded-lg sm:rounded-xl p-3 sm:p-4 mb-4 sm:mb-6 text-center w-full max-w-md">
+        <span class="text-amber-700 text-xs sm:text-sm">💡 تلميح: المضارع هو </span>
+        <span id="hintVerb" class="font-bold text-amber-800 text-base sm:text-lg"></span>
+       </div>
 
-            <!-- Streak -->
-            <div class="flex items-center gap-3 bg-gradient-to-r from-orange-500 to-red-500 rounded-2xl px-5 py-3 text-white">
-              <span id="streak" class="text-3xl">🔥</span>
-              <div>
-                <div class="text-xs text-white/80 font-bold">السلسلة</div>
-                <div id="streakCount" class="text-3xl font-black">0</div>
-              </div>
-            </div>
-
-            <!-- Mobile Question Counter -->
-            <div class="md:hidden">
-              <div class="bg-indigo-600 text-white rounded-xl px-4 py-2">
-                <div id="questionNumMobile" class="text-lg font-bold">1/10</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Question Card -->
-        <div id="questionCard" class="glass-effect rounded-3xl p-6 md:p-10 flex-1 flex flex-col card-shadow animate-scale-in">
-          
-          <!-- Question Type Badge -->
-          <div id="questionType" class="text-center mb-8">
-            <span class="inline-block bg-indigo-100 text-indigo-800 px-6 py-3 rounded-full text-base font-black border-2 border-indigo-200">
-              اختر الإجابة الصحيحة
-            </span>
-          </div>
-
-          <!-- Question Text -->
-          <div class="flex-1 flex flex-col items-center justify-center">
-            <p id="questionText" class="text-3xl md:text-4xl font-black text-gray-900 text-center mb-10 leading-relaxed arabic-text"></p>
-
-            <!-- Hint Box -->
-            <div id="hintBox" class="hidden bg-gradient-to-r from-amber-50 to-yellow-50 border-3 border-amber-300 rounded-2xl p-5 mb-8 text-center card-shadow">
-              <div class="flex items-center justify-center gap-2 mb-2">
-                <span class="text-2xl">💡</span>
-                <span class="text-amber-800 font-bold text-lg">تلميح مساعد</span>
-              </div>
-              <p class="text-amber-700 font-medium">المضارع هو: 
-                <span id="hintVerb" class="font-black text-amber-900 text-2xl arabic-text"></span>
-              </p>
-            </div>
-
-            <!-- Options Container -->
-            <div id="optionsContainer" class="w-full max-w-2xl space-y-4"></div>
-          </div>
-
-          <!-- Feedback Box -->
-          <div id="feedbackBox" class="hidden mt-8 p-6 rounded-2xl text-center card-shadow">
-            <p id="feedbackText" class="text-2xl font-black mb-3"></p>
-            <p id="feedbackExplanation" class="text-base font-medium leading-relaxed"></p>
-          </div>
-
-          <!-- Next Button -->
-          <button id="nextBtn" onclick="nextQuestion()" class="hidden mt-8 w-full gradient-green text-white text-2xl font-black py-5 rounded-2xl btn-hover card-shadow">
-            السؤال التالي ←
-          </button>
-        </div>
+       <!-- خيارات الإجابة -->
+       <div id="optionsContainer" class="w-full max-w-md space-y-2 sm:space-y-3"></div>
       </div>
 
-      <!-- Result Screen -->
-      <div id="resultScreen" class="hidden min-h-full flex items-center justify-center">
-        <div class="glass-effect rounded-3xl p-8 md:p-12 max-w-2xl w-full text-center card-shadow animate-scale-in">
-          
-          <!-- Result Emoji -->
-          <div id="resultEmoji" class="text-9xl mb-6 animate-bounce">🏆</div>
-
-          <!-- Result Title -->
-          <h2 id="resultTitle" class="text-4xl md:text-5xl font-black text-indigo-900 mb-4 arabic-text">
-            أحسنت!
-          </h2>
-          <p id="resultMessage" class="text-xl text-gray-600 mb-8 font-medium"></p>
-
-          <!-- Score Card -->
-          <div class="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-3xl p-8 mb-8 border-2 border-indigo-200 card-shadow">
-            <div class="text-7xl font-black text-indigo-900 mb-3">
-              <span id="finalScore">0</span>/<span id="totalQuestions">10</span>
-            </div>
-            <p class="text-gray-600 font-bold text-lg mb-6">إجابات صحيحة</p>
-            
-            <!-- Stats Grid -->
-            <div class="grid grid-cols-2 gap-4 mt-6">
-              <div class="bg-white/70 rounded-2xl p-4 border border-emerald-200">
-                <div id="accuracy" class="text-4xl font-black text-emerald-600 mb-1">0%</div>
-                <div class="text-sm text-gray-600 font-bold">الدقة</div>
-              </div>
-              <div class="bg-white/70 rounded-2xl p-4 border border-orange-200">
-                <div class="flex items-center justify-center gap-2 mb-1">
-                  <span class="text-3xl">🔥</span>
-                  <span id="maxStreak" class="text-4xl font-black text-orange-600">0</span>
-                </div>
-                <div class="text-sm text-gray-600 font-bold">أفضل سلسلة</div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Mistakes Summary -->
-          <div id="mistakesSummary" class="hidden bg-gradient-to-br from-red-50 to-pink-50 rounded-2xl p-6 mb-8 border-2 border-red-200 text-right">
-            <div class="flex items-center gap-3 mb-4">
-              <div class="text-3xl">📝</div>
-              <h4 class="text-xl font-black text-red-800">راجع هذه النقاط:</h4>
-            </div>
-            <ul id="mistakesList" class="text-base text-red-700 space-y-2 font-medium"></ul>
-          </div>
-
-          <!-- Action Buttons -->
-          <div class="space-y-4">
-            <button onclick="restartGame()" class="w-full gradient-blue text-white text-2xl font-black py-5 rounded-2xl btn-hover card-shadow">
-              <span class="inline-flex items-center gap-3">
-                <span>العب مرة أخرى</span>
-                <span class="text-3xl">🔄</span>
-              </span>
-            </button>
-            <button onclick="backToMenu()" class="w-full bg-white text-indigo-900 text-xl font-bold py-4 rounded-2xl btn-hover border-2 border-indigo-200">
-              العودة للقائمة الرئيسية
-            </button>
-          </div>
-        </div>
+      <!-- رسالة النتيجة -->
+      <div id="feedbackBox" class="hidden mt-4 sm:mt-6 p-3 sm:p-4 rounded-xl sm:rounded-2xl text-center">
+       <p id="feedbackText" class="text-base sm:text-lg font-bold mb-1 sm:mb-2"></p>
+       <p id="feedbackExplanation" class="text-xs sm:text-sm leading-relaxed"></p>
       </div>
 
-    </main>
+      <!-- زر المتابعة -->
+      <button id="nextBtn" onclick="nextQuestion()" class="hidden mt-4 sm:mt-6 w-full bg-gradient-to-r from-emerald-500 to-teal-500 text-white text-base sm:text-lg md:text-xl font-bold py-3 sm:py-4 rounded-xl sm:rounded-2xl hover:from-emerald-600 hover:to-teal-600 transition-all duration-300">
+       السؤال التالي ←
+      </button>
+     </div>
+    </div>
 
-    <!-- Footer -->
-    <footer class="glass-effect border-t-4 border-white/20 shadow-2xl mt-auto animate-slide-up">
-      <div class="container mx-auto px-4 md:px-8 py-5">
+    <!-- شاشة النتائج -->
+    <div id="resultScreen" class="hidden min-h-full flex items-center justify-center p-3 sm:p-4 md:p-6">
+     <div class="glass-effect rounded-2xl sm:rounded-3xl p-5 sm:p-8 md:p-12 max-w-lg w-full text-center shadow-2xl animate-slide">
+      <div id="resultEmoji" class="text-6xl sm:text-7xl md:text-8xl mb-4 sm:mb-6 animate-celebrate">
+       🏆
+      </div>
+      <h2 class="text-2xl sm:text-3xl font-extrabold text-indigo-900 mb-3 sm:mb-4">أحسنت!</h2>
+      <p id="resultMessage" class="text-gray-600 mb-4 sm:mb-6 text-sm sm:text-base md:text-lg"></p>
+      
+      <div class="bg-gradient-to-r from-indigo-100 to-purple-100 rounded-xl sm:rounded-2xl p-4 sm:p-6 mb-6 sm:mb-8">
+       <div class="text-4xl sm:text-5xl font-extrabold text-indigo-900 mb-2">
+        <span id="finalScore">0</span>/<span id="totalQuestions">10</span>
+       </div>
+       <p class="text-gray-600 text-sm sm:text-base">إجابات صحيحة</p>
+       <div class="mt-3 sm:mt-4 flex justify-center gap-3 sm:gap-4 flex-wrap">
         <div class="text-center">
-          <p class="text-indigo-900 font-black text-base md:text-lg mb-1">
-            من إعداد الأستاذ خليل البلوشي ✨
-          </p>
-          <p class="text-indigo-700 text-sm md:text-base font-semibold">
-            معلم مجال أول - مدرسة سعد بن معاذ للتعليم الأساسي
-          </p>
+         <div id="accuracy" class="text-xl sm:text-2xl font-bold text-emerald-600">0%</div>
+         <div class="text-xs text-gray-500">الدقة</div>
         </div>
+        <div class="text-center">
+         <div id="maxStreak" class="text-xl sm:text-2xl font-bold text-orange-600">0</div>
+         <div class="text-xs text-gray-500">أفضل سلسلة 🔥</div>
+        </div>
+       </div>
       </div>
-    </footer>
+
+      <!-- ملخص الأخطاء -->
+      <div id="mistakesSummary" class="hidden bg-red-50 rounded-xl sm:rounded-2xl p-3 sm:p-4 mb-4 sm:mb-6 text-right max-h-48 overflow-auto">
+       <h4 class="font-bold text-red-800 mb-2 sm:mb-3 text-sm sm:text-base">📝 راجع هذه الأفعال:</h4>
+       <ul id="mistakesList" class="text-xs sm:text-sm text-red-700 space-y-1"></ul>
+      </div>
+
+      <button onclick="restartGame()" class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white text-base sm:text-lg md:text-xl font-bold py-3 sm:py-4 px-6 sm:px-8 rounded-xl sm:rounded-2xl hover:from-indigo-700 hover:to-purple-700 transition-all duration-300 shadow-lg">
+       العب مرة أخرى 🔄
+      </button>
+     </div>
+    </div>
+
+   </main>
+
+   <!-- الفوتر الثابت - يظهر دائماً -->
+   <footer class="bg-white border-t-4 border-indigo-600 shadow-xl mt-auto">
+    <div class="container mx-auto px-3 sm:px-4 md:px-6 py-3 sm:py-4">
+     <div class="text-center">
+      <p class="text-indigo-900 font-bold text-xs sm:text-sm md:text-base mb-1">من إعداد الأستاذ خليل البلوشي</p>
+      <p class="text-indigo-700 text-xs md:text-sm">معلم مجال أول - مدرسة سعد بن معاذ للتعليم الأساسي</p>
+     </div>
+    </div>
+   </footer>
 
   </div>
 
   <script>
-    // Game Questions Data
+    // بيانات الأسئلة
     const allQuestions = [
-      // Multiple Choice Questions - Choose Correct Writing
-      { type: 'choose', verb: 'دنا', present: 'يدنو', correct: 'دنا', wrong: 'دنى', origin: 'واو', explanation: 'لأن المضارع "يدنو" ينتهي بواو، فتُكتب الألف ممدودة' },
-      { type: 'choose', verb: 'سما', present: 'يسمو', correct: 'سما', wrong: 'سمى', origin: 'واو', explanation: 'لأن المضارع "يسمو" ينتهي بواو، فتُكتب الألف ممدودة' },
-      { type: 'choose', verb: 'عفا', present: 'يعفو', correct: 'عفا', wrong: 'عفى', origin: 'واو', explanation: 'لأن المضارع "يعفو" ينتهي بواو، فتُكتب الألف ممدودة' },
-      { type: 'choose', verb: 'غزا', present: 'يغزو', correct: 'غزا', wrong: 'غزى', origin: 'واو', explanation: 'لأن المضارع "يغزو" ينتهي بواو، فتُكتب الألف ممدودة' },
-      { type: 'choose', verb: 'نجا', present: 'ينجو', correct: 'نجا', wrong: 'نجى', origin: 'واو', explanation: 'لأن المضارع "ينجو" ينتهي بواو، فتُكتب الألف ممدودة' },
-      { type: 'choose', verb: 'طوى', present: 'يطوي', correct: 'طوى', wrong: 'طوا', origin: 'ياء', explanation: 'لأن المضارع "يطوي" ينتهي بياء، فتُكتب الألف مقصورة' },
-      { type: 'choose', verb: 'قضى', present: 'يقضي', correct: 'قضى', wrong: 'قضا', origin: 'ياء', explanation: 'لأن المضارع "يقضي" ينتهي بياء، فتُكتب الألف مقصورة' },
-      { type: 'choose', verb: 'سرى', present: 'يسري', correct: 'سرى', wrong: 'سرا', origin: 'ياء', explanation: 'لأن المضارع "يسري" ينتهي بياء، فتُكتب الألف مقصورة' },
-      { type: 'choose', verb: 'هوى', present: 'يهوي', correct: 'هوى', wrong: 'هوا', origin: 'ياء', explanation: 'لأن المضارع "يهوي" ينتهي بياء، فتُكتب الألف مقصورة' },
-      { type: 'choose', verb: 'رمى', present: 'يرمي', correct: 'رمى', wrong: 'رما', origin: 'ياء', explanation: 'لأن المضارع "يرمي" ينتهي بياء، فتُكتب الألف مقصورة' },
-      { type: 'choose', verb: 'بنى', present: 'يبني', correct: 'بنى', wrong: 'بنا', origin: 'ياء', explanation: 'لأن المضارع "يبني" ينتهي بياء، فتُكتب الألف مقصورة' },
-      { type: 'choose', verb: 'جرى', present: 'يجري', correct: 'جرى', wrong: 'جرا', origin: 'ياء', explanation: 'لأن المضارع "يجري" ينتهي بياء، فتُكتب الألف مقصورة' },
-      { type: 'choose', verb: 'تلا', present: 'يتلو', correct: 'تلا', wrong: 'تلى', origin: 'واو', explanation: 'لأن المضارع "يتلو" ينتهي بواو، فتُكتب الألف ممدودة' },
-      { type: 'choose', verb: 'شكا', present: 'يشكو', correct: 'شكا', wrong: 'شكى', origin: 'واو', explanation: 'لأن المضارع "يشكو" ينتهي بواو، فتُكتب الألف ممدودة' },
-      { type: 'choose', verb: 'مشى', present: 'يمشي', correct: 'مشى', wrong: 'مشا', origin: 'ياء', explanation: 'لأن المضارع "يمشي" ينتهي بياء، فتُكتب الألف مقصورة' },
+      // أسئلة الاختيار من متعدد - أفعال ثلاثية
+      { type: 'choose', verb: 'دنا', present: 'يدنو', correct: 'دنا', wrong: 'دنى', verbType: 'ثلاثي', explanation: 'فعل ثلاثي: المضارع "يدنو" ينتهي بواو، فتُكتب الألف ممدودة' },
+      { type: 'choose', verb: 'سما', present: 'يسمو', correct: 'سما', wrong: 'سمى', verbType: 'ثلاثي', explanation: 'فعل ثلاثي: المضارع "يسمو" ينتهي بواو، فتُكتب الألف ممدودة' },
+      { type: 'choose', verb: 'عفا', present: 'يعفو', correct: 'عفا', wrong: 'عفى', verbType: 'ثلاثي', explanation: 'فعل ثلاثي: المضارع "يعفو" ينتهي بواو، فتُكتب الألف ممدودة' },
+      { type: 'choose', verb: 'قضى', present: 'يقضي', correct: 'قضى', wrong: 'قضا', verbType: 'ثلاثي', explanation: 'فعل ثلاثي: المضارع "يقضي" ينتهي بياء، فتُكتب الألف مقصورة' },
+      { type: 'choose', verb: 'رمى', present: 'يرمي', correct: 'رمى', wrong: 'رما', verbType: 'ثلاثي', explanation: 'فعل ثلاثي: المضارع "يرمي" ينتهي بياء، فتُكتب الألف مقصورة' },
+      { type: 'choose', verb: 'جرى', present: 'يجري', correct: 'جرى', wrong: 'جرا', verbType: 'ثلاثي', explanation: 'فعل ثلاثي: المضارع "يجري" ينتهي بياء، فتُكتب الألف مقصورة' },
+      { type: 'choose', verb: 'مشى', present: 'يمشي', correct: 'مشى', wrong: 'مشا', verbType: 'ثلاثي', explanation: 'فعل ثلاثي: المضارع "يمشي" ينتهي بياء، فتُكتب الألف مقصورة' },
+      { type: 'choose', verb: 'دعا', present: 'يدعو', correct: 'دعا', wrong: 'دعى', verbType: 'ثلاثي', explanation: 'فعل ثلاثي: المضارع "يدعو" ينتهي بواو، فتُكتب الألف ممدودة' },
       
-      // Origin Detection Questions
-      { type: 'origin', verb: 'دعا', present: 'يدعو', correct: 'واو', explanation: 'المضارع "يدعو" ينتهي بواو، فأصل الألف واو' },
-      { type: 'origin', verb: 'سعى', present: 'يسعى', correct: 'ياء', explanation: 'المضارع "يسعى" ينتهي بياء، فأصل الألف ياء' },
-      { type: 'origin', verb: 'نما', present: 'ينمو', correct: 'واو', explanation: 'المضارع "ينمو" ينتهي بواو، فأصل الألف واو' },
-      { type: 'origin', verb: 'هدى', present: 'يهدي', correct: 'ياء', explanation: 'المضارع "يهدي" ينتهي بياء، فأصل الألف ياء' },
-      { type: 'origin', verb: 'علا', present: 'يعلو', correct: 'واو', explanation: 'المضارع "يعلو" ينتهي بواو، فأصل الألف واو' },
+      // أسئلة الأفعال غير الثلاثية
+      { type: 'choose', verb: 'أعطى', present: 'يُعطي', correct: 'أعطى', wrong: 'أعطا', verbType: 'رباعي', explanation: 'فعل رباعي: الألف تُكتب مقصورة في الأفعال غير الثلاثية' },
+      { type: 'choose', verb: 'أوفى', present: 'يُوفي', correct: 'أوفى', wrong: 'أوفا', verbType: 'رباعي', explanation: 'فعل رباعي: الألف تُكتب مقصورة في الأفعال غير الثلاثية' },
+      { type: 'choose', verb: 'استوفى', present: 'يستوفي', correct: 'استوفى', wrong: 'استوفا', verbType: 'سداسي', explanation: 'فعل سداسي: الألف تُكتب مقصورة في الأفعال غير الثلاثية' },
+      { type: 'choose', verb: 'أهدى', present: 'يُهدي', correct: 'أهدى', wrong: 'أهدا', verbType: 'رباعي', explanation: 'فعل رباعي: الألف تُكتب مقصورة في الأفعال غير الثلاثية' },
+      { type: 'choose', verb: 'تمنى', present: 'يتمنى', correct: 'تمنى', wrong: 'تمنا', verbType: 'خماسي', explanation: 'فعل خماسي: الألف تُكتب مقصورة في الأفعال غير الثلاثية' },
+      { type: 'choose', verb: 'أحيا', present: 'يُحيي', correct: 'أحيا', wrong: 'أحيى', verbType: 'رباعي', explanation: 'فعل رباعي: ما قبل الألف ياء، فتُكتب الألف ممدودة (استثناء نادر)' },
+      { type: 'choose', verb: 'استحيا', present: 'يستحيي', correct: 'استحيا', wrong: 'استحيى', verbType: 'سداسي', explanation: 'فعل سداسي: ما قبل الألف ياء، فتُكتب الألف ممدودة (استثناء نادر)' },
       
-      // Fill in the Blank Questions
-      { type: 'fill', sentence: 'الطائر ___ في السماء', verb: 'سما', present: 'يسمو', correct: 'سما', wrong: 'سمى', origin: 'واو', explanation: 'لأن المضارع "يسمو" ينتهي بواو، نكتب "سما" بألف ممدودة' },
-      { type: 'fill', sentence: 'الماء ___ في النهر', verb: 'جرى', present: 'يجري', correct: 'جرى', wrong: 'جرا', origin: 'ياء', explanation: 'لأن المضارع "يجري" ينتهي بياء، نكتب "جرى" بألف مقصورة' },
-      { type: 'fill', sentence: 'الصياد ___ الرمح', verb: 'رمى', present: 'يرمي', correct: 'رمى', wrong: 'رما', origin: 'ياء', explanation: 'لأن المضارع "يرمي" ينتهي بياء، نكتب "رمى" بألف مقصورة' },
-      { type: 'fill', sentence: 'الجندي ___ الوطن', verb: 'حمى', present: 'يحمي', correct: 'حمى', wrong: 'حما', origin: 'ياء', explanation: 'لأن المضارع "يحمي" ينتهي بياء، نكتب "حمى" بألف مقصورة' },
-      { type: 'fill', sentence: 'المؤمن ___ إلى الله', verb: 'دعا', present: 'يدعو', correct: 'دعا', wrong: 'دعى', origin: 'واو', explanation: 'لأن المضارع "يدعو" ينتهي بواو، نكتب "دعا" بألف ممدودة' },
+      // أسئلة تحديد أصل الألف
+      { type: 'origin', verb: 'علا', present: 'يعلو', correct: 'واو', verbType: 'ثلاثي', explanation: 'فعل ثلاثي: المضارع "يعلو" ينتهي بواو' },
+      { type: 'origin', verb: 'سعى', present: 'يسعى', correct: 'ياء', verbType: 'ثلاثي', explanation: 'فعل ثلاثي: المضارع "يسعى" ينتهي بياء' },
+      { type: 'origin', verb: 'نما', present: 'ينمو', correct: 'واو', verbType: 'ثلاثي', explanation: 'فعل ثلاثي: المضارع "ينمو" ينتهي بواو' },
+      
+      // أسئلة ملء الفراغ
+      { type: 'fill', sentence: 'الطائر ___ في السماء', verb: 'سما', present: 'يسمو', correct: 'سما', wrong: 'سمى', verbType: 'ثلاثي', explanation: 'فعل ثلاثي: المضارع "يسمو" ينتهي بواو، فتُكتب الألف ممدودة' },
+      { type: 'fill', sentence: 'الماء ___ في النهر', verb: 'جرى', present: 'يجري', correct: 'جرى', wrong: 'جرا', verbType: 'ثلاثي', explanation: 'فعل ثلاثي: المضارع "يجري" ينتهي بياء، فتُكتب الألف مقصورة' },
+      { type: 'fill', sentence: 'المعلم ___ الجائزة للطالب', verb: 'أعطى', present: 'يُعطي', correct: 'أعطى', wrong: 'أعطا', verbType: 'رباعي', explanation: 'فعل رباعي: الألف تُكتب مقصورة في الأفعال غير الثلاثية' },
+      { type: 'fill', sentence: 'الطالب ___ أن ينجح', verb: 'تمنى', present: 'يتمنى', correct: 'تمنى', wrong: 'تمنا', verbType: 'خماسي', explanation: 'فعل خماسي: الألف تُكتب مقصورة في الأفعال غير الثلاثية' },
+      { type: 'fill', sentence: 'الله ___ الموتى', verb: 'أحيا', present: 'يُحيي', correct: 'أحيا', wrong: 'أحيى', verbType: 'رباعي', explanation: 'فعل رباعي: ما قبل الألف ياء، فتُكتب الألف ممدودة (استثناء)' },
     ];
     
-    // Theory Questions
+    // أسئلة قياس حفظ القواعد
     const theoryQuestions = [
-      // True/False Questions
+      // أسئلة صح وخطأ
       { 
         type: 'truefalse', 
-        question: 'الألف الممدودة (ا) تُكتب إذا كان أصلها واو في المضارع', 
+        question: 'في الأفعال الثلاثية: الألف الممدودة (ا) تُكتب إذا كان أصلها واو في المضارع', 
         correct: true, 
-        explanation: 'صحيح ✓ - مثال: دنا ← يدنو (الألف أصلها واو)' 
+        explanation: 'صحيح، مثل: دنا ← يدنو (فعل ثلاثي)' 
       },
       { 
         type: 'truefalse', 
-        question: 'الألف المقصورة (ى) تُكتب إذا كان أصلها واو في المضارع', 
+        question: 'في الأفعال غير الثلاثية: الألف تُكتب مقصورة دائماً بلا استثناء', 
         correct: false, 
-        explanation: 'خطأ ✗ - الألف المقصورة تُكتب إذا كان أصلها ياء، مثل: قضى ← يقضي' 
+        explanation: 'خطأ، تُكتب مقصورة إلا إذا كان ما قبلها ياء فتُكتب ممدودة (مثل: أحيا، استحيا)' 
       },
       { 
         type: 'truefalse', 
-        question: 'للتعرف على أصل الألف، نرجع إلى الفعل المضارع', 
+        question: 'الفعل "أعطى" يُكتب بألف مقصورة لأنه فعل غير ثلاثي', 
         correct: true, 
-        explanation: 'صحيح ✓ - المضارع يُظهر لنا أصل الألف (واو أو ياء)' 
+        explanation: 'صحيح، الأفعال غير الثلاثية تُكتب بألف مقصورة (أعطى، استوفى، أهدى)' 
       },
       { 
         type: 'truefalse', 
-        question: 'الفعل "سما" يُكتب بألف مقصورة لأن مضارعه "يسمي"', 
-        correct: false, 
-        explanation: 'خطأ ✗ - الفعل "سما" يُكتب بألف ممدودة لأن مضارعه "يسمو" بواو' 
-      },
-      { 
-        type: 'truefalse', 
-        question: 'إذا كان المضارع ينتهي بياء، تُكتب الألف مقصورة (ى)', 
+        question: 'الفعل "أحيا" يُكتب بألف ممدودة لأن ما قبل الألف ياء', 
         correct: true, 
-        explanation: 'صحيح ✓ - مثل: رمى ← يرمي (المضارع ينتهي بياء)' 
+        explanation: 'صحيح، استثناء نادر: إذا كان ما قبل الألف ياء تُكتب ممدودة حتى في غير الثلاثي' 
       },
       { 
         type: 'truefalse', 
-        question: 'جميع الأفعال الماضية تنتهي بألف ممدودة', 
-        correct: false, 
-        explanation: 'خطأ ✗ - بعضها ينتهي بألف ممدودة والبعض بألف مقصورة حسب أصل الألف' 
-      },
-      { 
-        type: 'truefalse', 
-        question: 'الفعل "قضى" ينتهي بألف مقصورة لأن مضارعه "يقضي"', 
+        question: 'للتعرف على أصل الألف في الفعل الثلاثي، نرجع إلى المضارع', 
         correct: true, 
-        explanation: 'صحيح ✓ - المضارع "يقضي" ينتهي بياء، فتُكتب الألف مقصورة' 
+        explanation: 'صحيح، المضارع يُظهر أصل الألف (واو أو ياء) في الأفعال الثلاثية' 
       },
       { 
         type: 'truefalse', 
-        question: 'الأفعال الثلاثية فقط تخضع لهذه القاعدة', 
+        question: 'جميع الأفعال الرباعية والخماسية والسداسية تُكتب بألف ممدودة', 
         correct: false, 
-        explanation: 'خطأ ✗ - جميع الأفعال التي تنتهي بألف تخضع لهذه القاعدة' 
+        explanation: 'خطأ، تُكتب مقصورة إلا إذا سبقها ياء' 
+      },
+      { 
+        type: 'truefalse', 
+        question: 'الفعل "استوفى" يُكتب بألف مقصورة لأنه فعل سداسي', 
+        correct: true, 
+        explanation: 'صحيح، الأفعال غير الثلاثية (بما فيها السداسية) تُكتب بألف مقصورة' 
+      },
+      { 
+        type: 'truefalse', 
+        question: 'عدد أحرف الفعل لا يؤثر على كتابة الألف', 
+        correct: false, 
+        explanation: 'خطأ، الثلاثي له قاعدة (حسب أصل الألف) وغير الثلاثي له قاعدة أخرى (مقصورة غالباً)' 
       },
       
-      // Multiple Choice Theory Questions
+      // أسئلة اختيار من متعدد نظرية
       { 
         type: 'mcq', 
-        question: 'متى تُكتب الألف في آخر الفعل ممدودة (ا)؟', 
-        options: ['إذا كان أصلها واو', 'إذا كان أصلها ياء', 'في جميع الأحوال', 'لا يوجد قاعدة محددة'],
+        question: 'متى تُكتب الألف ممدودة (ا) في الأفعال الثلاثية؟', 
+        options: ['إذا كان أصلها واو في المضارع', 'إذا كان أصلها ياء في المضارع', 'في جميع الأحوال', 'لا تُكتب ممدودة أبداً'],
         correct: 0,
-        explanation: 'الإجابة الصحيحة: إذا كان أصلها واو في المضارع تُكتب ممدودة' 
+        explanation: 'في الأفعال الثلاثية: تُكتب ممدودة إذا كان أصلها واو (دعا ← يدعو)' 
       },
       { 
         type: 'mcq', 
-        question: 'كيف نتعرف على أصل الألف في الفعل الماضي؟', 
-        options: ['بالرجوع إلى المصدر', 'بالرجوع إلى الفعل المضارع', 'بالرجوع إلى فعل الأمر', 'بحفظ جميع الأفعال'],
-        correct: 1,
-        explanation: 'الإجابة الصحيحة: نرجع إلى الفعل المضارع لمعرفة أصل الألف' 
-      },
-      { 
-        type: 'mcq', 
-        question: 'الفعل الذي مضارعه "يدنو" يُكتب في الماضي:', 
-        options: ['دنى', 'دنا', 'دنو', 'دني'],
-        correct: 1,
-        explanation: 'الإجابة الصحيحة: "دنا" بألف ممدودة لأن المضارع "يدنو" ينتهي بواو' 
-      },
-      { 
-        type: 'mcq', 
-        question: 'أي من الأفعال التالية يُكتب بألف مقصورة؟', 
-        options: ['عفا', 'سما', 'قضى', 'دعا'],
+        question: 'كيف تُكتب الألف في الأفعال غير الثلاثية؟', 
+        options: ['ممدودة دائماً', 'مقصورة دائماً', 'مقصورة إلا إذا سبقها ياء', 'حسب أصلها في المضارع'],
         correct: 2,
-        explanation: 'الإجابة الصحيحة: "قضى" يُكتب بألف مقصورة لأن مضارعه "يقضي" ينتهي بياء' 
+        explanation: 'الأفعال غير الثلاثية: مقصورة (أعطى، استوفى) إلا إذا سبقها ياء فممدودة (أحيا، استحيا)' 
       },
       { 
         type: 'mcq', 
-        question: 'ما الفرق الأساسي بين الألف الممدودة والمقصورة في الأفعال؟', 
-        options: ['الموقع في الجملة', 'طول الصوت', 'أصل الألف في المضارع', 'لا يوجد فرق'],
+        question: 'أي من الأفعال التالية يُكتب بألف ممدودة؟', 
+        options: ['أعطى', 'استوفى', 'أحيا', 'أهدى'],
         correct: 2,
-        explanation: 'الإجابة الصحيحة: الفرق يعتمد على أصل الألف في المضارع (واو أو ياء)' 
+        explanation: '"أحيا" تُكتب بألف ممدودة لأن ما قبلها ياء (استثناء في الأفعال غير الثلاثية)' 
       },
       { 
         type: 'mcq', 
-        question: 'إذا انتهى الفعل المضارع بياء، فإن الماضي ينتهي بـ:', 
-        options: ['ألف ممدودة (ا)', 'ألف مقصورة (ى)', 'واو', 'ياء'],
+        question: 'الفعل "أعطى" يُكتب بألف مقصورة لأنه:', 
+        options: ['فعل ثلاثي أصله ياء', 'فعل رباعي (غير ثلاثي)', 'مضارعه ينتهي بياء', 'لا يوجد سبب واضح'],
         correct: 1,
-        explanation: 'الإجابة الصحيحة: إذا انتهى المضارع بياء، يُكتب الماضي بألف مقصورة (ى)' 
+        explanation: 'أعطى فعل رباعي، والأفعال غير الثلاثية تُكتب بألف مقصورة' 
       },
       { 
         type: 'mcq', 
-        question: 'لماذا نهتم بمعرفة أصل الألف في الأفعال؟', 
-        options: ['للنطق الصحيح', 'للكتابة الصحيحة', 'للتعبير الأدبي', 'لجمال الخط'],
+        question: 'متى تُكتب الألف ممدودة في الأفعال غير الثلاثية؟', 
+        options: ['إذا كان المضارع ينتهي بواو', 'إذا كان ما قبل الألف ياء', 'لا تُكتب ممدودة أبداً', 'في جميع الأحوال'],
         correct: 1,
-        explanation: 'الإجابة الصحيحة: معرفة أصل الألف ضرورية للكتابة الصحيحة للأفعال' 
+        explanation: 'استثناء نادر: إذا كان ما قبل الألف ياء تُكتب ممدودة (أحيا، استحيا)' 
       },
       { 
         type: 'mcq', 
-        question: 'أي من القواعد التالية صحيحة؟', 
-        options: ['كل فعل ينتهي بألف واحدة', 'الألف في الأفعال دائماً ممدودة', 'المضارع يُظهر أصل الألف', 'الأفعال الثلاثية لا تنتهي بألف'],
-        correct: 2,
-        explanation: 'الإجابة الصحيحة: المضارع هو المفتاح لمعرفة أصل الألف وطريقة كتابتها' 
-      },
-      { 
-        type: 'mcq', 
-        question: 'الفعل "جرى" في المضارع يصبح:', 
-        options: ['يجرو', 'يجري', 'يجرا', 'يجرى'],
+        question: 'أي من الأفعال التالية جميعها غير ثلاثية؟', 
+        options: ['دعا، رمى، سما', 'أعطى، استوفى، أهدى', 'قضى، جرى، مشى', 'عفا، غزا، نجا'],
         correct: 1,
-        explanation: 'الإجابة الصحيحة: المضارع هو "يجري" بياء، لذلك الماضي "جرى" بألف مقصورة' 
+        explanation: 'أعطى (رباعي)، استوفى (سداسي)، أهدى (رباعي) - كلها أفعال غير ثلاثية' 
       },
       { 
         type: 'mcq', 
-        question: 'ما الذي يحدد نوع الألف في آخر الفعل؟', 
-        options: ['عدد أحرف الفعل', 'أصل الألف في المضارع', 'معنى الفعل', 'وزن الفعل'],
+        question: 'الفرق الأساسي في كتابة الألف بين الأفعال الثلاثية وغير الثلاثية:', 
+        options: ['لا يوجد فرق', 'الثلاثية حسب أصل الألف، غير الثلاثية مقصورة غالباً', 'الثلاثية مقصورة دائماً', 'غير الثلاثية ممدودة دائماً'],
         correct: 1,
-        explanation: 'الإجابة الصحيحة: أصل الألف في المضارع (واو أو ياء) يحدد نوع الألف في الماضي' 
+        explanation: 'الثلاثية تعتمد على أصل الألف (واو/ياء)، غير الثلاثية مقصورة إلا إذا سبقها ياء' 
+      },
+      { 
+        type: 'mcq', 
+        question: 'لمعرفة كتابة الألف في الفعل الثلاثي نرجع إلى:', 
+        options: ['عدد أحرف الفعل', 'المضارع لمعرفة أصل الألف', 'معنى الفعل', 'الفعل المزيد'],
+        correct: 1,
+        explanation: 'في الأفعال الثلاثية: نرجع للمضارع لمعرفة أصل الألف (واو أو ياء)' 
+      },
+      { 
+        type: 'mcq', 
+        question: 'أي من الأفعال التالية جميعها تُكتب بألف مقصورة؟', 
+        options: ['دعا، سما، علا', 'رمى، قضى، مشى', 'أحيا، استحيا، أعيا', 'عفا، غزا، نجا'],
+        correct: 1,
+        explanation: 'رمى، قضى، مشى - كلها أفعال ثلاثية أصلها ياء فتُكتب مقصورة' 
+      },
+      { 
+        type: 'mcq', 
+        question: 'عدد أحرف الفعل الأصلية يؤثر على كتابة الألف:', 
+        options: ['لا يؤثر مطلقاً', 'نعم، الثلاثي له قاعدة وغير الثلاثي له قاعدة أخرى', 'فقط في الأفعال المزيدة', 'فقط في حالات نادرة'],
+        correct: 1,
+        explanation: 'الأفعال الثلاثية لها قاعدة (حسب أصل الألف)، غير الثلاثية لها قاعدة مختلفة (مقصورة إلا إذا سبقها ياء)' 
       },
     ];
     
-    // Game State
     let questions = [];
     let currentQuestion = 0;
     let score = 0;
@@ -727,7 +436,12 @@
     let answered = false;
     let gameMode = 'practice';
     
-    // Utility Functions
+    const defaultConfig = {
+      game_title: 'لعبة الألف في الأفعال'
+    };
+    
+    let config = { ...defaultConfig };
+    
     function shuffleArray(array) {
       const shuffled = [...array];
       for (let i = shuffled.length - 1; i > 0; i--) {
@@ -737,23 +451,6 @@
       return shuffled;
     }
     
-    function createConfetti() {
-      const colors = ['#fbbf24', '#f59e0b', '#10b981', '#06b6d4', '#8b5cf6', '#ec4899'];
-      for (let i = 0; i < 50; i++) {
-        setTimeout(() => {
-          const confetti = document.createElement('div');
-          confetti.className = 'confetti';
-          confetti.style.left = Math.random() * 100 + '%';
-          confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
-          confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
-          confetti.style.animationDelay = Math.random() * 0.5 + 's';
-          document.body.appendChild(confetti);
-          setTimeout(() => confetti.remove(), 4000);
-        }, i * 30);
-      }
-    }
-    
-    // Game Functions
     function startGame(mode = 'practice') {
       gameMode = mode;
       
@@ -769,6 +466,9 @@
       maxStreak = 0;
       mistakes = [];
       
+      // إخفاء الهيدر عند بدء اللعبة
+      document.getElementById('mainHeader').style.display = 'none';
+      
       document.getElementById('startScreen').classList.add('hidden');
       document.getElementById('resultScreen').classList.add('hidden');
       document.getElementById('gameScreen').classList.remove('hidden');
@@ -780,21 +480,14 @@
       answered = false;
       const q = questions[currentQuestion];
       const questionCard = document.getElementById('questionCard');
-      
-      // Re-trigger animation
-      questionCard.classList.remove('animate-scale-in');
+      questionCard.classList.remove('animate-slide');
       void questionCard.offsetWidth;
-      questionCard.classList.add('animate-scale-in');
+      questionCard.classList.add('animate-slide');
       
-      // Update progress
-      const progress = ((currentQuestion + 1) / 10) * 100;
       document.getElementById('questionNum').textContent = `${currentQuestion + 1}/10`;
-      document.getElementById('questionNumMobile').textContent = `${currentQuestion + 1}/10`;
-      document.getElementById('progressBar').style.width = `${progress}%`;
       document.getElementById('score').textContent = score;
       document.getElementById('streakCount').textContent = streak;
       
-      // Reset UI
       document.getElementById('feedbackBox').classList.add('hidden');
       document.getElementById('nextBtn').classList.add('hidden');
       document.getElementById('hintBox').classList.add('hidden');
@@ -802,19 +495,18 @@
       const optionsContainer = document.getElementById('optionsContainer');
       optionsContainer.innerHTML = '';
       
-      // Display question based on type
       if (q.type === 'truefalse') {
-        document.getElementById('questionType').innerHTML = '<span class="inline-block bg-emerald-100 text-emerald-800 px-6 py-3 rounded-full text-base font-black border-2 border-emerald-200">✓ صح أو خطأ</span>';
+        document.getElementById('questionType').innerHTML = '<span class="bg-emerald-100 text-emerald-800 px-3 sm:px-4 py-1 sm:py-2 rounded-full text-xs sm:text-sm font-bold inline-block">✓ صح أو خطأ</span>';
         document.getElementById('questionText').textContent = q.question;
         
         ['✓ صح', '✗ خطأ'].forEach((opt, index) => {
           const isTrue = index === 0;
-          const btn = createOptionButton(opt, () => checkAnswer(isTrue, q.correct, q), isTrue ? 'emerald' : 'red');
+          const btn = createOptionButton(opt, () => checkAnswer(isTrue, q.correct, q));
           optionsContainer.appendChild(btn);
         });
         
       } else if (q.type === 'mcq') {
-        document.getElementById('questionType').innerHTML = '<span class="inline-block bg-teal-100 text-teal-800 px-6 py-3 rounded-full text-base font-black border-2 border-teal-200">📝 اختيار من متعدد</span>';
+        document.getElementById('questionType').innerHTML = '<span class="bg-teal-100 text-teal-800 px-3 sm:px-4 py-1 sm:py-2 rounded-full text-xs sm:text-sm font-bold inline-block">اختر الإجابة الصحيحة</span>';
         document.getElementById('questionText').textContent = q.question;
         
         q.options.forEach((opt, index) => {
@@ -823,7 +515,7 @@
         });
         
       } else if (q.type === 'choose') {
-        document.getElementById('questionType').innerHTML = '<span class="inline-block bg-indigo-100 text-indigo-800 px-6 py-3 rounded-full text-base font-black border-2 border-indigo-200">✍️ اختر الكتابة الصحيحة</span>';
+        document.getElementById('questionType').innerHTML = '<span class="bg-indigo-100 text-indigo-800 px-3 sm:px-4 py-1 sm:py-2 rounded-full text-xs sm:text-sm font-bold inline-block">اختر الكتابة الصحيحة</span>';
         document.getElementById('questionText').textContent = `ما الكتابة الصحيحة للفعل الماضي من "${q.present}"؟`;
         
         const options = shuffleArray([q.correct, q.wrong]);
@@ -833,21 +525,19 @@
         });
         
       } else if (q.type === 'origin') {
-        document.getElementById('questionType').innerHTML = '<span class="inline-block bg-purple-100 text-purple-800 px-6 py-3 rounded-full text-base font-black border-2 border-purple-200">🔍 حدد أصل الألف</span>';
+        document.getElementById('questionType').innerHTML = '<span class="bg-purple-100 text-purple-800 px-3 sm:px-4 py-1 sm:py-2 rounded-full text-xs sm:text-sm font-bold inline-block">حدد أصل الألف</span>';
         document.getElementById('questionText').textContent = `ما أصل الألف في الفعل "${q.verb}"؟`;
         
         document.getElementById('hintBox').classList.remove('hidden');
         document.getElementById('hintVerb').textContent = q.present;
         
-        ['واو', 'ياء'].forEach((opt, index) => {
-          const icon = opt === 'واو' ? '🔵' : '🟣';
-          const suffix = opt === 'واو' ? '(ا)' : '(ى)';
-          const btn = createOptionButton(`${icon} ${opt} ${suffix}`, () => checkAnswer(opt, q.correct, q), opt === 'واو' ? 'blue' : 'purple');
+        ['واو', 'ياء'].forEach(opt => {
+          const btn = createOptionButton(opt === 'واو' ? '🔵 واو (ا)' : '🟣 ياء (ى)', () => checkAnswer(opt, q.correct, q));
           optionsContainer.appendChild(btn);
         });
         
       } else if (q.type === 'fill') {
-        document.getElementById('questionType').innerHTML = '<span class="inline-block bg-amber-100 text-amber-800 px-6 py-3 rounded-full text-base font-black border-2 border-amber-200">📝 أكمل الجملة</span>';
+        document.getElementById('questionType').innerHTML = '<span class="bg-emerald-100 text-emerald-800 px-3 sm:px-4 py-1 sm:py-2 rounded-full text-xs sm:text-sm font-bold inline-block">أكمل الجملة</span>';
         document.getElementById('questionText').innerHTML = `أكمل: <span class="text-indigo-600">"${q.sentence}"</span>`;
         
         const options = shuffleArray([q.correct, q.wrong]);
@@ -858,9 +548,9 @@
       }
     }
     
-    function createOptionButton(text, onClick, colorClass = 'indigo') {
+    function createOptionButton(text, onClick) {
       const btn = document.createElement('button');
-      btn.className = `w-full bg-white border-3 border-gray-200 text-gray-900 text-xl md:text-2xl font-black py-5 px-6 rounded-2xl btn-hover card-shadow hover:border-${colorClass}-400 hover:bg-${colorClass}-50 transition-all duration-300`;
+      btn.className = 'w-full bg-white border-2 border-gray-200 text-gray-800 text-base sm:text-lg md:text-xl font-bold py-3 sm:py-4 px-4 sm:px-6 rounded-xl sm:rounded-2xl hover:border-indigo-400 hover:bg-indigo-50 transition-all duration-200';
       btn.textContent = text;
       btn.onclick = onClick;
       return btn;
@@ -873,7 +563,6 @@
       const buttons = document.querySelectorAll('#optionsContainer button');
       let isCorrect = false;
       
-      // Determine if answer is correct
       if (q.type === 'truefalse') {
         isCorrect = selected === correct;
       } else if (q.type === 'mcq') {
@@ -883,7 +572,6 @@
                     (q.type === 'origin' && selected === correct);
       }
       
-      // Update button states
       buttons.forEach((btn, index) => {
         btn.disabled = true;
         const btnText = btn.textContent;
@@ -901,18 +589,16 @@
         }
         
         if (isThisCorrect) {
-          btn.className = 'w-full gradient-green text-white text-xl md:text-2xl font-black py-5 px-6 rounded-2xl card-shadow border-4 border-emerald-400';
-          btn.style.animation = 'pulse 0.5s ease-out';
+          btn.className = 'w-full bg-emerald-500 border-2 border-emerald-600 text-white text-base sm:text-lg md:text-xl font-bold py-3 sm:py-4 px-4 sm:px-6 rounded-xl sm:rounded-2xl';
         } else if ((q.type === 'truefalse' && ((btnText.includes('صح') && selected === true) || (btnText.includes('خطأ') && selected === false))) ||
                    (q.type === 'mcq' && index === selected) ||
                    (btnText === selected || btnText.includes(selected))) {
           if (!isCorrect) {
-            btn.className = 'w-full gradient-red text-white text-xl md:text-2xl font-black py-5 px-6 rounded-2xl card-shadow animate-shake border-4 border-red-400';
+            btn.className = 'w-full bg-red-500 border-2 border-red-600 text-white text-base sm:text-lg md:text-xl font-bold py-3 sm:py-4 px-4 sm:px-6 rounded-xl sm:rounded-2xl animate-shake';
           }
         }
       });
       
-      // Show feedback
       const feedbackBox = document.getElementById('feedbackBox');
       const feedbackText = document.getElementById('feedbackText');
       const feedbackExplanation = document.getElementById('feedbackExplanation');
@@ -922,22 +608,13 @@
         streak++;
         if (streak > maxStreak) maxStreak = streak;
         
-        feedbackBox.className = 'mt-8 p-6 rounded-2xl text-center bg-gradient-to-br from-emerald-50 to-teal-50 border-3 border-emerald-300 card-shadow';
-        feedbackText.className = 'text-2xl font-black mb-3 text-emerald-800';
-        
-        if (streak >= 5) {
-          feedbackText.innerHTML = `🔥🔥🔥 رائع جداً! سلسلة ${streak} إجابات صحيحة!`;
-          createConfetti();
-        } else if (streak >= 3) {
-          feedbackText.innerHTML = `🔥 ممتاز! سلسلة ${streak} إجابات صحيحة!`;
-        } else {
-          feedbackText.textContent = '✅ إجابة صحيحة!';
-        }
-        
-        feedbackExplanation.className = 'text-base font-medium text-emerald-700';
+        feedbackBox.className = 'mt-4 sm:mt-6 p-3 sm:p-4 rounded-xl sm:rounded-2xl text-center bg-emerald-100 border-2 border-emerald-300';
+        feedbackText.className = 'text-base sm:text-lg font-bold mb-1 sm:mb-2 text-emerald-800';
+        feedbackText.textContent = streak >= 3 ? `🔥 رائع! سلسلة ${streak} إجابات صحيحة!` : '✅ إجابة صحيحة!';
+        feedbackExplanation.className = 'text-xs sm:text-sm text-emerald-700';
         
         document.getElementById('score').classList.add('animate-pulse-custom');
-        setTimeout(() => document.getElementById('score').classList.remove('animate-pulse-custom'), 400);
+        setTimeout(() => document.getElementById('score').classList.remove('animate-pulse-custom'), 300);
       } else {
         streak = 0;
         if (q.verb) {
@@ -946,24 +623,21 @@
           mistakes.push({ verb: q.question, correct: 'راجع الشرح', present: '' });
         }
         
-        feedbackBox.className = 'mt-8 p-6 rounded-2xl text-center bg-gradient-to-br from-red-50 to-pink-50 border-3 border-red-300 card-shadow';
-        feedbackText.className = 'text-2xl font-black mb-3 text-red-800';
+        feedbackBox.className = 'mt-4 sm:mt-6 p-3 sm:p-4 rounded-xl sm:rounded-2xl text-center bg-red-100 border-2 border-red-300';
+        feedbackText.className = 'text-base sm:text-lg font-bold mb-1 sm:mb-2 text-red-800';
         feedbackText.textContent = '❌ إجابة خاطئة';
-        feedbackExplanation.className = 'text-base font-medium text-red-700';
+        feedbackExplanation.className = 'text-xs sm:text-sm text-red-700';
       }
       
       feedbackExplanation.textContent = q.explanation;
       feedbackBox.classList.remove('hidden');
-      feedbackBox.classList.add('animate-scale-in');
       
       document.getElementById('score').textContent = score;
       document.getElementById('streakCount').textContent = streak;
       
-      // Show next button
       const nextBtn = document.getElementById('nextBtn');
       nextBtn.textContent = currentQuestion < 9 ? 'السؤال التالي ←' : 'عرض النتائج 🏆';
       nextBtn.classList.remove('hidden');
-      nextBtn.classList.add('animate-slide-up');
     }
     
     function nextQuestion() {
@@ -986,33 +660,25 @@
       document.getElementById('maxStreak').textContent = maxStreak;
       
       const resultEmoji = document.getElementById('resultEmoji');
-      const resultTitle = document.getElementById('resultTitle');
       const resultMessage = document.getElementById('resultMessage');
       
       if (percentage === 100) {
         resultEmoji.textContent = '🏆';
-        resultTitle.textContent = 'ممتاز!';
-        resultMessage.textContent = 'أنت متقن لقواعد كتابة الألف في الأفعال! 🌟';
-        createConfetti();
+        resultMessage.textContent = 'ممتاز! أنت متقن لقواعد كتابة الألف في الأفعال!';
       } else if (percentage >= 80) {
         resultEmoji.textContent = '🌟';
-        resultTitle.textContent = 'أحسنت!';
-        resultMessage.textContent = 'أداء رائع، واصل التميز! 👏';
+        resultMessage.textContent = 'أحسنت! أداء رائع، واصل التعلم!';
       } else if (percentage >= 60) {
         resultEmoji.textContent = '👍';
-        resultTitle.textContent = 'جيد!';
-        resultMessage.textContent = 'تحتاج لمراجعة بعض القواعد. استمر! 💪';
+        resultMessage.textContent = 'جيد! تحتاج لمراجعة بعض القواعد.';
       } else if (percentage >= 40) {
         resultEmoji.textContent = '📚';
-        resultTitle.textContent = 'لا بأس!';
-        resultMessage.textContent = 'راجع القواعد وحاول مرة أخرى! 📖';
+        resultMessage.textContent = 'لا بأس، راجع القواعد وحاول مرة أخرى!';
       } else {
         resultEmoji.textContent = '💪';
-        resultTitle.textContent = 'حاول مجدداً!';
-        resultMessage.textContent = 'تحتاج لمزيد من التدريب، لا تستسلم! 🎯';
+        resultMessage.textContent = 'تحتاج لمزيد من التدريب، لا تستسلم!';
       }
       
-      // Show mistakes
       const mistakesSummary = document.getElementById('mistakesSummary');
       const mistakesList = document.getElementById('mistakesList');
       
@@ -1020,11 +686,11 @@
         mistakesSummary.classList.remove('hidden');
         if (gameMode === 'theory') {
           mistakesList.innerHTML = mistakes.map(m => 
-            `<li class="mb-3 pb-3 border-b border-red-200 last:border-0">• ${m.verb.substring(0, 80)}${m.verb.length > 80 ? '...' : ''}</li>`
+            `<li class="mb-2">• ${m.verb.substring(0, 60)}${m.verb.length > 60 ? '...' : ''}</li>`
           ).join('');
         } else {
           mistakesList.innerHTML = mistakes.map(m => 
-            `<li class="mb-3 pb-3 border-b border-red-200 last:border-0 arabic-text"><strong>${m.verb}</strong> ← ${m.present} <br><span class="text-sm">(الصحيح: <strong class="text-red-900">${m.correct}</strong>)</span></li>`
+            `<li>• ${m.verb} ← ${m.present} (الصحيح: ${m.correct})</li>`
           ).join('');
         }
       } else {
@@ -1033,14 +699,43 @@
     }
     
     function restartGame() {
-      startGame(gameMode);
-    }
-    
-    function backToMenu() {
+      // إظهار الهيدر عند العودة للشاشة الرئيسية
+      document.getElementById('mainHeader').style.display = 'block';
+      
       document.getElementById('gameScreen').classList.add('hidden');
       document.getElementById('resultScreen').classList.add('hidden');
       document.getElementById('startScreen').classList.remove('hidden');
     }
+    
+    async function onConfigChange(newConfig) {
+      const title = newConfig.game_title || defaultConfig.game_title;
+      document.getElementById('gameTitle').textContent = title;
+      document.getElementById('headerTitle').textContent = title;
+    }
+    
+    function mapToCapabilities(cfg) {
+      return {
+        recolorables: [],
+        borderables: [],
+        fontEditable: undefined,
+        fontSizeable: undefined
+      };
+    }
+    
+    function mapToEditPanelValues(cfg) {
+      return new Map([
+        ['game_title', cfg.game_title || defaultConfig.game_title]
+      ]);
+    }
+    
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities,
+        mapToEditPanelValues
+      });
+    }
   </script>
-</body>
+ </body>
 </html>
